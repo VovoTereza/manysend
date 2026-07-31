@@ -27,7 +27,7 @@ function ThemeButton({theme,setTheme}) { return <button className="icon-button" 
 function Login({onLogin, theme, setTheme}) {
   const [password,setPassword]=useState(''); const [email,setEmail]=useState('acartomantereal@gmail.com');
   const [show,setShow]=useState(false); const [error,setError]=useState(''); const [loading,setLoading]=useState(false);
-  const submit=async(e)=>{e.preventDefault();setError('');setLoading(true);if(!supabaseConfigured){setError('Supabase não configurado. Verifique as variáveis de ambiente.');setLoading(false);return}const {error:authError}=await supabase.auth.signInWithPassword({email,password});if(authError){setError('E-mail ou senha incorretos.');setLoading(false);return}onLogin?.()};
+  const submit=async(e)=>{e.preventDefault();setError('');setLoading(true);if(!supabaseConfigured){setError('Supabase não configurado. Verifique as variáveis de ambiente.');setLoading(false);return}const {error:authError}=await supabase.auth.signInWithPassword({email:email.trim().toLowerCase(),password:password.trim()});if(authError){setError(authError.status===400?'E-mail ou senha incorretos.':'Não foi possível acessar o servidor de autenticação. Tente novamente.');setLoading(false);return}onLogin?.()};
   return <main className="login-shell">
     <section className="login-story">
       <div className="brand"><span className="brand-mark"><Message variant="Bold"/></span><b>manysend</b></div>
