@@ -24,9 +24,9 @@ const channels = [
 function ThemeButton({theme,setTheme}) { return <button className="icon-button" aria-label="Alternar tema" onClick={()=>setTheme(theme==='dark'?'light':'dark')}>{theme==='dark'?<Sun1/>:<Moon/>}</button> }
 
 function Login({onLogin, theme, setTheme}) {
-  const [password,setPassword]=useState(''); const [email,setEmail]=useState('admin@manysend.com');
+  const [password,setPassword]=useState('admin'); const [username,setUsername]=useState('admin');
   const [show,setShow]=useState(false); const [error,setError]=useState(''); const [loading,setLoading]=useState(false);
-  const submit=(e)=>{e.preventDefault(); if(!email.includes('@')||password.length<6){setError('Use um e-mail válido e uma senha com pelo menos 6 caracteres.');return} setError('');setLoading(true);setTimeout(()=>onLogin(),700)};
+  const submit=(e)=>{e.preventDefault(); if(username!=='admin'||password!=='admin'){setError('Usuário ou senha incorretos. Use admin nos dois campos.');return} setError('');setLoading(true);setTimeout(()=>onLogin(),700)};
   return <main className="login-shell">
     <section className="login-story">
       <div className="brand"><span className="brand-mark"><Message variant="Bold"/></span><b>manysend</b></div>
@@ -36,8 +36,8 @@ function Login({onLogin, theme, setTheme}) {
     </section>
     <section className="login-panel"><div className="theme-float"><ThemeButton theme={theme} setTheme={setTheme}/></div><form onSubmit={submit}>
       <span className="mobile-brand">manysend</span><h2>Bem-vindo de volta</h2><p className="muted">Entre no painel da sua operação.</p>
-      <label>E-mail<input value={email} onChange={e=>setEmail(e.target.value)} type="email" placeholder="voce@empresa.com"/></label>
-      <label>Senha<div className="password"><input value={password} onChange={e=>setPassword(e.target.value)} type={show?'text':'password'} placeholder="Sua senha"/><button type="button" onClick={()=>setShow(!show)}>{show?<EyeSlash/>:<Eye/>}</button></div></label>
+      <label>Usuário<input value={username} onChange={e=>setUsername(e.target.value)} type="text" autoComplete="username" placeholder="Seu usuário"/></label>
+      <label>Senha<div className="password"><input value={password} onChange={e=>setPassword(e.target.value)} type={show?'text':'password'} autoComplete="current-password" placeholder="Sua senha"/><button type="button" onClick={()=>setShow(!show)} aria-label={show?'Ocultar senha':'Mostrar senha'}>{show?<EyeSlash/>:<Eye/>}</button></div></label>
       <div className="form-row"><label className="check"><input type="checkbox"/> Manter conectado</label><button type="button" className="link">Esqueci minha senha</button></div>
       {error&&<div className="error"><CloseCircle/>{error}</div>}
       <button className="primary login-button" disabled={loading}>{loading?<span className="loading-line">Validando acesso</span>:<>Entrar no painel <ArrowRight2/></>}</button>
