@@ -1,0 +1,10 @@
+project_id = "zbunlgjdgsstyczkznel"
+
+[api]
+enabled = true
+
+[auth]
+enabled = true
+site_url = "http://localhost:5199"
+additional_redirect_urls = ["http://localhost:5199"]
+

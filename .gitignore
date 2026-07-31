@@ -1,9 +1,9 @@
 node_modules/
 dist/
 .vercel/
+supabase/.temp/
 .env
 .env.*
 !.env.example
 *.log
 .vite-*.log
-

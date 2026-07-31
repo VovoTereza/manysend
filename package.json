@@ -13,11 +13,11 @@
     "node": ">=20 <25"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.111.0",
     "@vitejs/plugin-react": "latest",
     "iconsax-react": "latest",
-    "vite": "latest",
     "react": "latest",
-    "react-dom": "latest"
-  },
-  "devDependencies": {}
+    "react-dom": "latest",
+    "vite": "latest"
+  }
 }

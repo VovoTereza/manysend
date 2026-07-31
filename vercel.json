@@ -3,6 +3,10 @@
   "framework": "vite",
   "buildCommand": "npm run vercel-build",
   "outputDirectory": "dist",
+  "env": {
+    "VITE_SUPABASE_URL": "https://zbunlgjdgsstyczkznel.supabase.co",
+    "VITE_SUPABASE_ANON_KEY": "sb_publishable_j06RA4elI43V_Jf4w6sHbg_NLjByCug"
+  },
   "functions": {
     "api/**/*.js": {
       "maxDuration": 10
