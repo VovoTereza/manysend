@@ -56,7 +56,7 @@ export async function GET(request) {
         records.push({
           platform: 'instagram', external_account_id: instagram.id,
           display_name: instagram.name || instagram.username, username: instagram.username || null,
-          status: 'connected', permissions: ['instagram_basic','instagram_content_publish','instagram_manage_comments','instagram_manage_messages'],
+          status: 'connected', permissions: ['instagram_basic','pages_show_list','pages_read_engagement'],
           token_ciphertext: tokenCiphertext,
           metadata: { facebook_page_id: page.id, profile_picture_url: instagram.profile_picture_url || null, followers_count: instagram.followers_count ?? null, connected_by: state.userId },
           last_synced_at: now, updated_at: now

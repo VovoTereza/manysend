@@ -14,12 +14,7 @@ export async function GET(request) {
       scope: [
         'pages_show_list',
         'pages_read_engagement',
-        'pages_manage_posts',
-        'pages_messaging',
-        'instagram_basic',
-        'instagram_content_publish',
-        'instagram_manage_comments',
-        'instagram_manage_messages'
+        'instagram_basic'
       ].join(',')
     });
     return noStoreJson({ authorizationUrl: `https://www.facebook.com/${config.version}/dialog/oauth?${params}` });
