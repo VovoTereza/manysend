@@ -11,12 +11,14 @@ export async function GET(request) {
       redirect_uri: config.redirectUri,
       response_type: 'code',
       state,
-      scope: [
-        'pages_show_list',
-        'pages_read_engagement',
-        'instagram_basic'
-      ].join(',')
+      auth_type: 'rerequest'
     });
+    if (process.env.META_LOGIN_CONFIG_ID?.trim()) {
+      params.set('config_id', process.env.META_LOGIN_CONFIG_ID.trim());
+      params.set('override_default_response_type', 'true');
+    } else {
+      params.set('scope', ['pages_show_list','pages_read_engagement','instagram_basic'].join(','));
+    }
     return noStoreJson({ authorizationUrl: `https://www.facebook.com/${config.version}/dialog/oauth?${params}` });
   } catch (error) {
     return noStoreJson({ error: 'configuration_required', detail: error.message }, 503);

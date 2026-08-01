@@ -36,6 +36,24 @@ export async function GET(request) {
     const longResponse = await fetch(`https://graph.facebook.com/${config.version}/oauth/access_token?${longParams}`);
     const longToken = await longResponse.json();
     const userToken = longResponse.ok && longToken.access_token ? longToken.access_token : token.access_token;
+    const permissionsResponse = await fetch(`https://graph.facebook.com/${config.version}/me/permissions?access_token=${encodeURIComponent(userToken)}`);
+    const permissionsData = permissionsResponse.ok ? await permissionsResponse.json() : { data: [] };
+    const granted = new Set((permissionsData.data || []).filter(item=>item.status==='granted').map(item=>item.permission));
+    const missingPermissions = ['pages_show_list','pages_read_engagement'].filter(permission=>!granted.has(permission));
+    if (missingPermissions.length) throw new Error(`permissions_not_granted:${missingPermissions.join(',')}`);
+
+    const debugParams = new URLSearchParams({
+      input_token: userToken,
+      access_token: `${config.appId}|${config.appSecret}`
+    });
+    const debugResponse = await fetch(`https://graph.facebook.com/${config.version}/debug_token?${debugParams}`);
+    const debugData = debugResponse.ok ? await debugResponse.json() : null;
+    const pageTargets = new Set();
+    for (const scope of debugData?.data?.granular_scopes || []) {
+      if (['pages_show_list','pages_read_engagement'].includes(scope.scope)) {
+        for (const id of scope.target_ids || []) pageTargets.add(id);
+      }
+    }
     const fields = 'id,name,username,access_token,tasks,instagram_business_account{id,name,username,profile_picture_url,followers_count}';
     const accountResponse = await fetch(`https://graph.facebook.com/${config.version}/me/accounts?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(userToken)}`);
     const accountData = await accountResponse.json();
@@ -63,7 +81,7 @@ export async function GET(request) {
         });
       }
     }
-    if (!records.length) throw new Error('no_managed_pages_found');
+    if (!records.length) throw new Error(pageTargets.size?'authorized_pages_not_returned':'no_page_assets_authorized');
     await upsertSocialAccounts(records);
     return panelRedirect(request, 'connected');
   } catch (error) {
